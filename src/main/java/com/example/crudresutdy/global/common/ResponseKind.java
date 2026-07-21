@@ -12,12 +12,12 @@ public enum ResponseKind {
 
     POST_POST(HttpStatus.CREATED, "게시물이 되었습니다."),
     POST_GET(HttpStatus.OK, "게시물이 조회 되었습니다."),
-    POST_UPDATE(HttpStatus.CREATED, "게시물이 수정되었습니다."),
+    POST_UPDATE(HttpStatus.OK, "게시물이 수정되었습니다."),
     POST_DELETE(HttpStatus.NO_CONTENT, "게시물이 삭제 되었습니다"),
 
     COMMENT_POST(HttpStatus.CREATED, "댓글이 되었습니다."),
     COMMENT_GET(HttpStatus.OK, "댓글이 조회 되었습니다."),
-    COMMENT_UPDATE(HttpStatus.CREATED, "댓글이 수정되었습니다."),
+    COMMENT_UPDATE(HttpStatus.OK, "댓글이 수정되었습니다."),
     COMMENT_DELETE(HttpStatus.NO_CONTENT, "댓글이 삭제 되었습니다");
 
     @Getter

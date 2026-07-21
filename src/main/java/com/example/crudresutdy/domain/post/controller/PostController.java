@@ -26,21 +26,25 @@ public class PostController {
             @Valid @RequestBody CreatePostRequest request
             ) {
         ReadPostResponse response = postService.createPost(request);
-        return ResponseEntity.ok(
-                ApiResponse.ok(POST_POST.getHttpStatus(), POST_POST.getMessage(), POST_POST, response)
-        );
+        return ResponseEntity
+                .status(POST_POST.getHttpStatus())
+                .body(ApiResponse.ok(POST_POST.getHttpStatus(), POST_POST.getMessage(), POST_POST, response));
     }
 
     @GetMapping
     public ResponseEntity<ApiResponse<List<ReadPostResponse>>> readAllPost() {
         List<ReadPostResponse> response = postService.getAllPosts();
-        return ResponseEntity.ok(ApiResponse.ok(POST_GET.getHttpStatus(), POST_GET.getMessage(), POST_GET, response));
+        return ResponseEntity
+                .status(POST_GET.getHttpStatus())
+                .body(ApiResponse.ok(POST_GET.getHttpStatus(), POST_GET.getMessage(), POST_GET, response));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<ReadPostResponse>> readPost(@PathVariable Long id) {
         ReadPostResponse response = postService.getPost(id);
-        return ResponseEntity.ok(ApiResponse.ok(POST_GET.getHttpStatus(), POST_GET.getMessage(), POST_GET, response));
+        return ResponseEntity
+                .status(POST_GET.getHttpStatus())
+                .body(ApiResponse.ok(POST_GET.getHttpStatus(), POST_GET.getMessage(), POST_GET, response));
     }
 
     @PutMapping("/{id}")
@@ -48,12 +52,16 @@ public class PostController {
             @PathVariable Long id,
             @Valid @RequestBody UpdatePostRequest request) {
         ReadPostResponse response = postService.updatePost(id, request);
-        return ResponseEntity.ok(ApiResponse.ok(POST_UPDATE.getHttpStatus(), POST_UPDATE.getMessage(), POST_UPDATE, response));
+        return ResponseEntity
+                .status(POST_UPDATE.getHttpStatus())
+                .body(ApiResponse.ok(POST_UPDATE.getHttpStatus(), POST_UPDATE.getMessage(), POST_UPDATE, response));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<Void>> deletePost(@PathVariable Long id) {
         postService.deletePost(id);
-        return ResponseEntity.ok(ApiResponse.ok(POST_DELETE.getHttpStatus(), POST_DELETE.getMessage(), POST_DELETE));
+        return ResponseEntity
+                .status(POST_DELETE.getHttpStatus())
+                .body(ApiResponse.ok(POST_DELETE.getHttpStatus(), POST_DELETE.getMessage(), POST_DELETE));
     }
 }
