@@ -1,5 +1,6 @@
-package com.example.crudresutdy.domain.post.entity;
+package com.example.crudresutdy.domain.comment.entity;
 
+import com.example.crudresutdy.domain.post.entity.Post;
 import com.example.crudresutdy.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,26 +11,26 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "posts")
-public class Post extends BaseTimeEntity {
+@Table(name = "comments")
+public class Comment extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 500)
-    private String title;
-
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(nullable = false)
+    private Post postId;
+
     @Builder
-    public Post(String title, String content) {
-        this.title = title;
+    public Comment(String content, Post postId) {
         this.content = content;
+        this.postId = postId;
     }
 
-    public void updatePost(String title, String content) {
-        this.title = title;
+    public void update(String content) {
         this.content = content;
     }
 }

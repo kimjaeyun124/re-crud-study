@@ -22,6 +22,7 @@ public enum ResponseKind {
 
     @Getter
     private final HttpStatus httpStatus;
+
     @Getter
     private final String message;
 }

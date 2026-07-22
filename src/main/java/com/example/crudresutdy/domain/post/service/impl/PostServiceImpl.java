@@ -42,7 +42,7 @@ public class PostServiceImpl implements PostService  {
     public ReadPostResponse updatePost(Long id, UpdatePostRequest request) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
-        post.update(request.title(), request.content());
+        post.updatePost(request.title(), request.content());
         return ReadPostResponse.of(post);
     }
 

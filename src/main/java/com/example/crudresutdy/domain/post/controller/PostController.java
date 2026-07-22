@@ -16,7 +16,7 @@ import java.util.List;
 import static com.example.crudresutdy.global.common.ResponseKind.*;
 
 @RestController // @Controller + @ResponseBOdy + @Component
-@RequestMapping("/api/v1/post")
+@RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
