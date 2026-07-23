@@ -20,6 +20,11 @@ import java.util.List;
 public class PostServiceImpl implements PostService  {
     private final PostRepository postRepository;
 
+    private Post getPostOrThrow(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+    }
+
     @Transactional
     public ReadPostResponse createPost(CreatePostRequest postRequest) {
         Post post = Post.builder()
@@ -30,10 +35,7 @@ public class PostServiceImpl implements PostService  {
     }
 
     public ReadPostResponse getPost(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
-
-        return ReadPostResponse.of(post);
+        return ReadPostResponse.of(getPostOrThrow(id));
     }
 
     public List<ReadPostResponse> getAllPosts() {
@@ -42,16 +44,13 @@ public class PostServiceImpl implements PostService  {
 
     @Transactional
     public ReadPostResponse updatePost(Long id, UpdatePostRequest request) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+        Post post = getPostOrThrow(id);
         post.updatePost(request.title(), request.content());
         return ReadPostResponse.of(post);
     }
 
     @Transactional
     public void deletePost(Long id) {
-        Post post = postRepository.findById(id)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
-        postRepository.delete(post);
+        postRepository.delete(getPostOrThrow(id));
     }
 }

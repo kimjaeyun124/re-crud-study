@@ -24,31 +24,34 @@ public class CommentServiceImpl implements CommentService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
+    private Post getPostOrThrow(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+    }
+
+    private Comment getCommentOrThrow(Long id) {
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
+    }
+
     @Transactional
     public ReadCommentResponse createComment(Long postId, CreateCommentRequest commentRequest) {
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
-
         Comment comment = Comment.builder()
                 .content(commentRequest.content())
-                .postId(post)
+                .postId(getPostOrThrow(postId))
                 .build();
 
         return ReadCommentResponse.of(commentRepository.save(comment));
     }
 
-    public List<ReadCommentResponse> getPostComment(Long postId) {
-        postRepository.findById(postId)
-                .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
+    public List<ReadCommentResponse> getPostComments(Long postId) {
+        getPostOrThrow(postId);
 
         return ReadCommentResponse.formList(commentRepository.findByPostId(postId));
     }
 
     public ReadCommentResponse getComment(Long id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
-
-        return ReadCommentResponse.of(comment);
+        return ReadCommentResponse.of(getCommentOrThrow(id));
     }
 
     public List<ReadCommentResponse> getAllComments() {
@@ -57,16 +60,13 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     public ReadCommentResponse updateComment(Long id, UpdateCommentRequest request) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
+        Comment comment = getCommentOrThrow(id);
         comment.update(request.content());
         return ReadCommentResponse.of(comment);
     }
 
     @Transactional
     public void deleteComment(Long id) {
-        Comment comment = commentRepository.findById(id)
-                .orElseThrow(() -> new CommentException(ErrorCode.COMMENT_NOT_FOUND));
-        commentRepository.delete(comment);
+        commentRepository.delete(getCommentOrThrow(id));
     }
 }

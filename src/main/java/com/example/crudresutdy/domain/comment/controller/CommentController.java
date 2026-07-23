@@ -33,7 +33,7 @@ public class CommentController {
 
     @GetMapping("/{postId}/comments")
     public ResponseEntity<ApiResponse<List<ReadCommentResponse>>> readPostComment(@PathVariable Long postId) {
-        List<ReadCommentResponse> response = commentService.getPostComment(postId);
+        List<ReadCommentResponse> response = commentService.getPostComments(postId);
         return ResponseEntity
                 .status(COMMENT_GET.getHttpStatus())
                 .body(ApiResponse.ok(COMMENT_GET.getHttpStatus(), COMMENT_GET.getMessage(), COMMENT_GET, response));
