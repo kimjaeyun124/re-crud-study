@@ -8,18 +8,19 @@ import com.example.crudresutdy.domain.post.repository.PostRepository;
 import com.example.crudresutdy.domain.post.service.PostService;
 import com.example.crudresutdy.global.exception.ErrorCode;
 import com.example.crudresutdy.global.exception.PostException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional(rollbackOn = Exception.class)
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService  {
     private final PostRepository postRepository;
 
+    @Transactional
     public ReadPostResponse createPost(CreatePostRequest postRequest) {
         Post post = Post.builder()
                 .title(postRequest.title())
@@ -39,6 +40,7 @@ public class PostServiceImpl implements PostService  {
         return ReadPostResponse.formList(postRepository.findAll());
     }
 
+    @Transactional
     public ReadPostResponse updatePost(Long id, UpdatePostRequest request) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
@@ -46,6 +48,7 @@ public class PostServiceImpl implements PostService  {
         return ReadPostResponse.of(post);
     }
 
+    @Transactional
     public void deletePost(Long id) {
         Post post = postRepository.findById(id)
                 .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));

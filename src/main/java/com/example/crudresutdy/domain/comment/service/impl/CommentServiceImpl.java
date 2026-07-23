@@ -11,14 +11,14 @@ import com.example.crudresutdy.domain.post.repository.PostRepository;
 import com.example.crudresutdy.global.exception.CommentException;
 import com.example.crudresutdy.global.exception.ErrorCode;
 import com.example.crudresutdy.global.exception.PostException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
-@Transactional(rollbackOn = Exception.class)
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final PostRepository postRepository;
@@ -37,7 +37,6 @@ public class CommentServiceImpl implements CommentService {
         return ReadCommentResponse.of(commentRepository.save(comment));
     }
 
-    @Transactional
     public List<ReadCommentResponse> getPostComment(Long postId) {
         postRepository.findById(postId)
                 .orElseThrow(() -> new PostException(ErrorCode.POST_NOT_FOUND));
